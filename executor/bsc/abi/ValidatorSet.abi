@@ -1,0 +1,1 @@
+[{"anonymous":false,"inputs":[{"indexed":true,"name":"sequence","type":"uint64"},{"indexed":true,"name":"validator","type":"address"},{"indexed":false,"name":"amount","type":"uint256"}],"name":"validatorFelony","type":"event"}]

@@ -4,7 +4,7 @@ go 1.12
 
 require (
 	github.com/aws/aws-sdk-go v1.25.48
-	github.com/binance-chain/go-sdk v1.2.2-0.20200518084232-913a655ff1d5
+	github.com/binance-chain/go-sdk v0.0.0-00010101000000-000000000000
 	github.com/ethereum/go-ethereum v1.9.12
 	github.com/gorilla/mux v1.7.4
 	github.com/jinzhu/gorm v1.9.12
@@ -16,6 +16,8 @@ require (
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 
-replace github.com/zondax/hid => github.com/binance-chain/hid v0.9.1-0.20190807012304-e1ffd6f0a3cc
-
-replace github.com/tendermint/go-amino => github.com/binance-chain/bnc-go-amino v0.14.1-binance.1
+replace (
+	github.com/binance-chain/go-sdk => github.com/binance-chain/go-sdk-private v0.0.0-20200615080709-72c0a947eee9
+	github.com/tendermint/go-amino => github.com/binance-chain/bnc-go-amino v0.14.1-binance.1
+	github.com/zondax/hid => github.com/binance-chain/hid v0.9.1-0.20190807012304-e1ffd6f0a3cc
+)

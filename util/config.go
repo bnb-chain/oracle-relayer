@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/binance-chain/oracle-relayer/common"
-
 	ethcmm "github.com/ethereum/go-ethereum/common"
+
+	"github.com/binance-chain/oracle-relayer/common"
 )
 
 const (
@@ -27,14 +27,33 @@ func (cfg *Config) Validate() {
 	cfg.DBConfig.Validate()
 	cfg.ChainConfig.Validate()
 	cfg.LogConfig.Validate()
+	cfg.AlertConfig.Validate()
 }
 
 type AlertConfig struct {
-	Moniker        string `json:"moniker"`
+	Moniker string `json:"moniker"`
+
 	TelegramBotId  string `json:"telegram_bot_id"`
 	TelegramChatId string `json:"telegram_chat_id"`
 
-	BlockUpdateTimeOut int64 `json:"block_update_time_out"`
+	PagerDutyToken string `json:"pager_duty_token"`
+
+	BlockUpdateTimeOut         int64 `json:"block_update_time_out"`
+	PackageDelayAlertThreshold int64 `json:"package_delay_alert_threshold"`
+}
+
+func (cfg *AlertConfig) Validate() {
+	if cfg.Moniker == "" {
+		panic("moniker should not be empty")
+	}
+
+	if cfg.BlockUpdateTimeOut <= 0 {
+		panic(fmt.Sprintf("block_update_time_out should be larger than 0"))
+	}
+
+	if cfg.PackageDelayAlertThreshold <= 0 {
+		panic(fmt.Sprintf("package_delay_alert_threshold should be larger than 0"))
+	}
 }
 
 type DBConfig struct {
@@ -52,18 +71,19 @@ func (cfg *DBConfig) Validate() {
 }
 
 type ChainConfig struct {
-	BSCStartHeight                 int64          `json:"bsc_start_height"`
-	BSCProvider                    string         `json:"bsc_provider"`
-	BSCConfirmNum                  int64          `json:"bsc_confirm_num"`
-	BSCChainId                     string         `json:"bsc_chain_id"`
-	BSCTokenHubContractAddress     ethcmm.Address `json:"bsc_token_hub_contract_address"`
-	BSCValidatorSetContractAddress ethcmm.Address `json:"bsc_validator_set_contract_address"`
+	BSCStartHeight               int64          `json:"bsc_start_height"`
+	BSCProvider                  string         `json:"bsc_provider"`
+	BSCConfirmNum                int64          `json:"bsc_confirm_num"`
+	BSCChainId                   uint16         `json:"bsc_chain_id"`
+	BSCCrossChainContractAddress ethcmm.Address `json:"bsc_cross_chain_contract_address"`
 
 	BBCRpcAddr       string `json:"bbc_rpc_addr"`
 	BBCMnemonic      string `json:"bbc_mnemonic"`
 	BBCKeyType       string `json:"bbc_key_type"`
 	BBCAWSRegion     string `json:"bbc_aws_region"`
 	BBCAWSSecretName string `json:"bbc_aws_secret_name"`
+
+	RelayInterval int64 `json:"relay_interval"`
 }
 
 func (cfg *ChainConfig) Validate() {
@@ -76,16 +96,10 @@ func (cfg *ChainConfig) Validate() {
 	if cfg.BSCConfirmNum <= 0 {
 		panic("bsc_confirm_num should be larger than 0")
 	}
-	if cfg.BSCChainId == "" {
-		panic("bsc_chain_id should not be empty")
-	}
 
 	var emptyAddr ethcmm.Address
-	if cfg.BSCTokenHubContractAddress.String() == emptyAddr.String() {
+	if cfg.BSCCrossChainContractAddress.String() == emptyAddr.String() {
 		panic(fmt.Sprintf("bsc_token_hub_contract_address should not be empty"))
-	}
-	if cfg.BSCValidatorSetContractAddress.String() == emptyAddr.String() {
-		panic(fmt.Sprintf("bsc_validator_set_contract_address should not be empty"))
 	}
 
 	if cfg.BBCRpcAddr == "" {
@@ -102,6 +116,10 @@ func (cfg *ChainConfig) Validate() {
 	}
 	if cfg.BBCKeyType == KeyTypeAWSMnemonic && cfg.BBCAWSSecretName == "" {
 		panic(fmt.Sprintf("bbc_aws_secret_name of binance chain should not be empty"))
+	}
+
+	if cfg.RelayInterval <= 0 {
+		panic(fmt.Sprintf("relay interval should be larger than 0"))
 	}
 }
 

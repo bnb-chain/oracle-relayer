@@ -25,21 +25,24 @@ func (l *BlockLog) BeforeCreate() (err error) {
 	return nil
 }
 
-type TxStatus int
+type PackageStatus int
 
 const (
-	TxStatusInit      TxStatus = 0
-	TxStatusConfirmed TxStatus = 1
-	TxStatusClaimed   TxStatus = 2
+	PackageStatusInit      PackageStatus = 0
+	PackageStatusConfirmed PackageStatus = 1
+	PackageStatusClaimed   PackageStatus = 2
 )
 
-type ClaimLog struct {
-	Id        int64
-	Sequence  int64
-	ClaimType int8
-	Claim     string `gorm:"type:text"`
+type CrossChainPackageLog struct {
+	Id              int64
+	ChainId         uint16
+	OracleSequence  uint64
+	PackageSequence uint64
+	ChannelId       uint8
+	PayLoad         string `gorm:"type:text"`
+	TxIndex         uint
 
-	Status       TxStatus
+	Status       PackageStatus
 	BlockHash    string
 	TxHash       string
 	Height       int64
@@ -48,8 +51,8 @@ type ClaimLog struct {
 	UpdateTime   int64
 }
 
-func (ClaimLog) TableName() string {
-	return "claim_log"
+func (CrossChainPackageLog) TableName() string {
+	return "cross_chain_package_log"
 }
 
 func InitTables(db *gorm.DB) {
@@ -59,7 +62,10 @@ func InitTables(db *gorm.DB) {
 		db.Model(&BlockLog{}).AddIndex("idx_block_log_create_time", "create_time")
 	}
 
-	if !db.HasTable(&ClaimLog{}) {
-		db.CreateTable(&ClaimLog{})
+	if !db.HasTable(&CrossChainPackageLog{}) {
+		db.CreateTable(&CrossChainPackageLog{})
+		db.Model(&CrossChainPackageLog{}).AddIndex("idx_package_log_channel_seq", "channel_id", "oracle_sequence")
+		db.Model(&CrossChainPackageLog{}).AddIndex("idx_package_log_height", "height")
+		db.Model(&CrossChainPackageLog{}).AddIndex("idx_package_log_status", "status")
 	}
 }

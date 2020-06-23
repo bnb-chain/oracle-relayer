@@ -48,15 +48,15 @@ func (e *Executor) GetAddress() types.ValAddress {
 	return types.ValAddress(keyManager.GetAddr())
 }
 
-func (e *Executor) GetProphecy(claimType msg.ClaimType, sequence int64) (*msg.Prophecy, error) {
-	prop, err := e.RpcClient.GetProphecy(claimType, sequence)
+func (e *Executor) GetProphecy(chainId uint16, sequence int64) (*msg.Prophecy, error) {
+	prop, err := e.RpcClient.GetProphecy(types.IbcChainID(chainId), sequence)
 	if err != nil {
 		return nil, err
 	}
 	return prop, err
 }
 
-func (e *Executor) Claim(claimType msg.ClaimType, sequence int64, claim string) error {
+func (e *Executor) Claim(chainId uint16, sequence uint64, payload []byte) error {
 	keyManager, err := getKeyManager(e.config.ChainConfig)
 	if err != nil {
 		return fmt.Errorf("get key manager error, err=%s", err.Error())
@@ -64,7 +64,7 @@ func (e *Executor) Claim(claimType msg.ClaimType, sequence int64, claim string) 
 	e.RpcClient.SetKeyManager(keyManager)
 	defer e.RpcClient.SetKeyManager(nil)
 
-	res, err := e.RpcClient.Claim(claimType, claim, sequence, rpc.Commit)
+	res, err := e.RpcClient.Claim(types.IbcChainID(chainId), sequence, payload, rpc.Commit)
 	if err != nil {
 		return err
 	}
@@ -75,8 +75,8 @@ func (e *Executor) Claim(claimType msg.ClaimType, sequence int64, claim string) 
 	return nil
 }
 
-func (e *Executor) GetCurrentSequence(claimType msg.ClaimType) (int64, error) {
-	sequence, err := e.RpcClient.GetCurrentSequence(claimType)
+func (e *Executor) GetCurrentSequence(chainId uint16) (int64, error) {
+	sequence, err := e.RpcClient.GetCurrentOracleSequence(types.IbcChainID(chainId))
 	if err != nil {
 		return 0, err
 	}

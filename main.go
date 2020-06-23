@@ -125,7 +125,7 @@ func main() {
 		fmt.Printf("new bbc executor error, err=%s\n", err.Error())
 		return
 	}
-	oracleRelayer := relayer.NewRelayer(db, bbcExecutor)
+	oracleRelayer := relayer.NewRelayer(db, bbcExecutor, config)
 	go oracleRelayer.Main()
 
 	adm := admin.NewAdmin(config, bbcExecutor)

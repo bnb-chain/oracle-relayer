@@ -46,7 +46,7 @@ func initFlags() {
 }
 
 func printUsage() {
-	fmt.Print("usage: ./relayer --bbc-network [0 for testnet, 1 for mainnet] --config-path config_file_path\n")
+	fmt.Print("usage: ./relayer --bbc-network [0 for testnet, 1 for mainnet] --config-type [local or aws] --config-path config_file_path\n")
 }
 
 func main() {
@@ -99,12 +99,7 @@ func main() {
 		}
 		config = util.ParseConfigFromFile(configFilePath)
 	}
-
-	configPath := viper.GetString(flagConfigPath)
-	if configPath == "" {
-		fmt.Println("config path should not be empty")
-		return
-	}
+	config.Validate()
 
 	// init logger
 	util.InitLogger(*config.LogConfig)

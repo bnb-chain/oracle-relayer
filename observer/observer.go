@@ -124,8 +124,8 @@ func (ob *Observer) UpdateConfirmedNum(height int64) error {
 
 func (ob *Observer) Prune() {
 	for {
-		curOtherChainBlockLog := ob.GetCurrentBlockLog()
-		ob.DB.Where("height < ?", curOtherChainBlockLog.Height-common.ObserverMaxBlockNumber).Delete(model.BlockLog{})
+		curBlockLog := ob.GetCurrentBlockLog()
+		ob.DB.Where("height < ?", curBlockLog.Height-common.ObserverMaxBlockNumber).Delete(model.BlockLog{})
 		time.Sleep(common.ObserverPruneInterval)
 	}
 }

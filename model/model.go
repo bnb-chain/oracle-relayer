@@ -51,6 +51,12 @@ type CrossChainPackageLog struct {
 	UpdateTime   int64
 }
 
+func (l *CrossChainPackageLog) BeforeCreate() (err error) {
+	l.CreateTime = time.Now().Unix()
+	l.UpdateTime = time.Now().Unix()
+	return nil
+}
+
 func (CrossChainPackageLog) TableName() string {
 	return "cross_chain_package_log"
 }

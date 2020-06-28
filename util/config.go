@@ -36,8 +36,6 @@ type AlertConfig struct {
 	TelegramBotId  string `json:"telegram_bot_id"`
 	TelegramChatId string `json:"telegram_chat_id"`
 
-	PagerDutyToken string `json:"pager_duty_token"`
-
 	BlockUpdateTimeOut         int64 `json:"block_update_time_out"`
 	PackageDelayAlertThreshold int64 `json:"package_delay_alert_threshold"`
 }

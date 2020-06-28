@@ -22,6 +22,9 @@ test_unit:
 
 # uses https://github.com/sasha-s/go-deadlock/ to detect potential deadlocks
 set_with_deadlock:
+	go get -u golang.org/x/tools/cmd/goimports
+	go get github.com/sasha-s/go-deadlock
+
 	find . -name "*.go" | xargs -n 1 sed -i.mutex_bak 's/sync.RWMutex/deadlock.RWMutex/'
 	find . -name "*.go" | xargs -n 1 sed -i.mutex_bak 's/sync.Mutex/deadlock.Mutex/'
 	go mod download
@@ -34,4 +37,9 @@ cleanup_after_test_with_deadlock:
 	find . -name "*.go" | xargs -n 1 goimports -w
 	find . -name "*.go.mutex_bak" | xargs rm
 
-.PHONY: build test test_unit set_with_deadlock cleanup_after_test_with_deadlock
+update_mock_executor:
+	go get github.com/golang/mock/gomock
+	go install github.com/golang/mock/mockgen
+	$(shell mockgen -source=executor/executor.go -package mock > executor/mock/mock_executor.go)
+
+.PHONY: build build_docker test test_unit set_with_deadlock cleanup_after_test_with_deadlock update_mock_executor

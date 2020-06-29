@@ -117,6 +117,8 @@ func (r *Relayer) process(chainId uint16) error {
 
 func (r *Relayer) Alert() {
 	for {
+		time.Sleep(common.PackageDelayAlertInterval)
+
 		claimLog := &model.CrossChainPackageLog{}
 
 		err := r.DB.Where("chain_id = ? and status = ?",
@@ -136,7 +138,5 @@ func (r *Relayer) Alert() {
 
 			util.SendTelegramMessage(r.Config.AlertConfig.TelegramBotId, r.Config.AlertConfig.TelegramChatId, alertMsg)
 		}
-
-		time.Sleep(common.PackageDelayAlertInterval)
 	}
 }

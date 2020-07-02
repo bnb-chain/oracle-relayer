@@ -102,15 +102,16 @@ func (r *Relayer) process(chainId uint16) error {
 
 	util.Logger.Infof("claim, chain_id=%d, seq=%d, payload=%s",
 		chainId, sequence, hex.EncodeToString(encodedPackages))
-	err = r.BBCExecutor.Claim(chainId, uint64(sequence), encodedPackages)
+	txHash, err := r.BBCExecutor.Claim(chainId, uint64(sequence), encodedPackages)
 	if err != nil {
 		util.Logger.Errorf("claim error: err=%s", err.Error())
 		return err
 	}
 
 	r.DB.Model(model.CrossChainPackageLog{}).Where("oracle_sequence = ? and chain_id = ?", sequence, chainId).Update(map[string]interface{}{
-		"status":      model.PackageStatusClaimed,
-		"update_time": time.Now().Unix(),
+		"status":        model.PackageStatusClaimed,
+		"claim_tx_hash": txHash,
+		"update_time":   time.Now().Unix(),
 	})
 	return nil
 }

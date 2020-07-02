@@ -56,23 +56,23 @@ func (e *Executor) GetProphecy(chainId uint16, sequence int64) (*msg.Prophecy, e
 	return prop, err
 }
 
-func (e *Executor) Claim(chainId uint16, sequence uint64, payload []byte) error {
+func (e *Executor) Claim(chainId uint16, sequence uint64, payload []byte) (string, error) {
 	keyManager, err := getKeyManager(e.config.ChainConfig)
 	if err != nil {
-		return fmt.Errorf("get key manager error, err=%s", err.Error())
+		return "", fmt.Errorf("get key manager error, err=%s", err.Error())
 	}
 	e.RpcClient.SetKeyManager(keyManager)
 	defer e.RpcClient.SetKeyManager(nil)
 
 	res, err := e.RpcClient.Claim(types.IbcChainID(chainId), sequence, payload, rpc.Commit)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if res.Code != 0 {
-		return fmt.Errorf("claim error, code=%d, log=%s", res.Code, res.Log)
+		return "", fmt.Errorf("claim error, code=%d, log=%s", res.Code, res.Log)
 	}
 	util.Logger.Infof("claim success, tx_hash=%s", res.Hash.String())
-	return nil
+	return res.Hash.String(), nil
 }
 
 func (e *Executor) GetCurrentSequence(chainId uint16) (int64, error) {

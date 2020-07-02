@@ -45,6 +45,7 @@ type CrossChainPackageLog struct {
 	Status       PackageStatus
 	BlockHash    string
 	TxHash       string
+	ClaimTxHash  string
 	Height       int64
 	ConfirmedNum int64
 	CreateTime   int64

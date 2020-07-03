@@ -18,7 +18,7 @@ test:
 
 test_unit:
 	@echo "--> go test "
-	@go test -race $(PACKAGES)
+	@go test --cover -race $(PACKAGES)
 
 # uses https://github.com/sasha-s/go-deadlock/ to detect potential deadlocks
 set_with_deadlock:

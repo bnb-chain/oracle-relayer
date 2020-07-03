@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.25.48
 	github.com/binance-chain/go-sdk v0.0.0-00010101000000-000000000000
 	github.com/ethereum/go-ethereum v1.9.12
-	github.com/golang/mock v1.4.3 // indirect
+	github.com/golang/mock v1.4.3
 	github.com/gorilla/mux v1.7.4
 	github.com/jinzhu/gorm v1.9.12
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
@@ -15,9 +15,10 @@ require (
 	github.com/sasha-s/go-deadlock v0.2.0 // indirect
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.0.0
+	github.com/stretchr/testify v1.4.0
 	github.com/tendermint/tendermint v0.32.3
 	golang.org/x/mod v0.3.0 // indirect
-	golang.org/x/tools v0.0.0-20200624060801-dcbf2a9ed15d // indirect
+	golang.org/x/tools v0.0.0-20200702044944-0cc1aa72b347 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 

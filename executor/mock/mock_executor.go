@@ -5,11 +5,12 @@
 package mock
 
 import (
+	reflect "reflect"
+
 	types "github.com/binance-chain/go-sdk/common/types"
 	msg "github.com/binance-chain/go-sdk/types/msg"
 	common "github.com/binance-chain/oracle-relayer/common"
 	gomock "github.com/golang/mock/gomock"
-	reflect "reflect"
 )
 
 // MockBbcExecutor is a mock of BbcExecutor interface
@@ -80,11 +81,12 @@ func (mr *MockBbcExecutorMockRecorder) GetProphecy(chainId, sequence interface{}
 }
 
 // Claim mocks base method
-func (m *MockBbcExecutor) Claim(chainId uint16, sequence uint64, payload []byte) error {
+func (m *MockBbcExecutor) Claim(chainId uint16, sequence uint64, payload []byte) (string, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Claim", chainId, sequence, payload)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Claim indicates an expected call of Claim

@@ -1,6 +1,17 @@
+package util
+
+import (
+	"io/ioutil"
+
+	"github.com/jinzhu/gorm"
+
+	"github.com/binance-chain/oracle-relayer/model"
+)
+
+var testConfig = `
 {
   "db_config": {
-    "dialect": "mysql",
+    "dialect": "sqlite3",
     "db_path": "user:password@(host:port)/db_name?charset=utf8&parseTime=True&loc=Local"
   },
   "chain_config": {
@@ -32,8 +43,29 @@
   },
   "alert_config": {
     "moniker": "moniker",
-    "telegram_bot_id": "",
-    "telegram_chat_id": "",
+    "telegram_bot_id": "your_bot_id",
+    "telegram_chat_id": "your_chat_id",
     "block_update_time_out": 60
   }
+}
+`
+
+func GetTestConfig() *Config {
+	config := ParseConfigFromJson(testConfig)
+	return config
+}
+
+func PrepareDB(config *Config) (*gorm.DB, error) {
+	config.DBConfig.DBPath = "tmp.db"
+	tmpDBFile, err := ioutil.TempFile("", config.DBConfig.DBPath)
+	if err != nil {
+		return nil, err
+	}
+
+	db, err := gorm.Open(config.DBConfig.Dialect, tmpDBFile.Name())
+	if err != nil {
+		return nil, err
+	}
+	model.InitTables(db)
+	return db, nil
 }

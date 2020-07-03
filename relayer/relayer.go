@@ -11,18 +11,18 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/binance-chain/oracle-relayer/common"
-	"github.com/binance-chain/oracle-relayer/executor/bbc"
+	"github.com/binance-chain/oracle-relayer/executor"
 	"github.com/binance-chain/oracle-relayer/model"
 	"github.com/binance-chain/oracle-relayer/util"
 )
 
 type Relayer struct {
 	DB          *gorm.DB
-	BBCExecutor *bbc.Executor
+	BBCExecutor executor.BbcExecutor
 	Config      *util.Config
 }
 
-func NewRelayer(db *gorm.DB, bbcExecutor *bbc.Executor, cfg *util.Config) *Relayer {
+func NewRelayer(db *gorm.DB, bbcExecutor executor.BbcExecutor, cfg *util.Config) *Relayer {
 	return &Relayer{
 		DB:          db,
 		BBCExecutor: bbcExecutor,
@@ -59,9 +59,7 @@ func (r *Relayer) process(chainId uint16) error {
 	err = r.DB.Where("oracle_sequence = ? and chain_id = ? and status = ?",
 		sequence, chainId, model.PackageStatusConfirmed).Order("tx_index asc").Find(&claimLogs).Error
 	if err != nil {
-		if err != gorm.ErrRecordNotFound {
-			util.Logger.Errorf("query claim log error: err=%s", err.Error())
-		}
+		util.Logger.Errorf("query claim log error: err=%s", err.Error())
 		return err
 	}
 

@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/binance-chain/oracle-relayer/common"
-	"github.com/binance-chain/oracle-relayer/executor/bsc"
+	"github.com/binance-chain/oracle-relayer/executor"
 	"github.com/binance-chain/oracle-relayer/model"
 	"github.com/binance-chain/oracle-relayer/util"
 )
@@ -15,10 +15,10 @@ import (
 type Observer struct {
 	DB          *gorm.DB
 	Config      *util.Config
-	BscExecutor *bsc.Executor
+	BscExecutor executor.BscExecutor
 }
 
-func NewObserver(db *gorm.DB, cfg *util.Config, bscExecutor *bsc.Executor) *Observer {
+func NewObserver(db *gorm.DB, cfg *util.Config, bscExecutor executor.BscExecutor) *Observer {
 	return &Observer{
 		DB:          db,
 		Config:      cfg,

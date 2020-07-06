@@ -118,11 +118,18 @@ func (r *Relayer) Alert() {
 	for {
 		time.Sleep(common.PackageDelayAlertInterval)
 
+		sequence, err := r.BBCExecutor.GetCurrentSequence(r.Config.ChainConfig.BSCChainId)
+		if err != nil {
+			util.Logger.Errorf("get current sequence error: chainId=%d, err=%s",
+				r.Config.ChainConfig.BSCChainId, err.Error())
+			continue
+		}
+
 		claimLog := &model.CrossChainPackageLog{}
 
-		err := r.DB.Where("chain_id = ? and status = ?",
-			r.Config.ChainConfig.BSCChainId, model.PackageStatusConfirmed).Order("oracle_sequence asc").First(&claimLog).Error
-		if err != nil {
+		err = r.DB.Where("chain_id = ? and status = ? and oracle_sequence >= ?",
+			r.Config.ChainConfig.BSCChainId, model.PackageStatusConfirmed, sequence).Order("oracle_sequence asc").First(&claimLog).Error
+		if err != nil && err != gorm.ErrRecordNotFound {
 			util.Logger.Errorf("query claim log error: err=%s", err.Error())
 			continue
 		}

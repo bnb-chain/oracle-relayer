@@ -23,7 +23,7 @@ require (
 )
 
 replace (
-	github.com/binance-chain/go-sdk => github.com/binance-chain/go-sdk-private v0.0.0-20200615080709-72c0a947eee9
+	github.com/binance-chain/go-sdk => github.com/binance-chain/go-sdk v1.2.3-bscAlpha.0
 	github.com/tendermint/go-amino => github.com/binance-chain/bnc-go-amino v0.14.1-binance.1
 	github.com/zondax/hid => github.com/binance-chain/hid v0.9.1-0.20190807012304-e1ffd6f0a3cc
 )

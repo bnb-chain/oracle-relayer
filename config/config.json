@@ -34,6 +34,7 @@
     "moniker": "moniker",
     "telegram_bot_id": "",
     "telegram_chat_id": "",
-    "block_update_time_out": 60
+    "block_update_time_out": 60,
+    "package_delay_alert_threshold": 30,
   }
 }

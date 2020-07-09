@@ -53,7 +53,10 @@ func main() {
 	initFlags()
 
 	bbcNetwork := viper.GetInt(flagBBCNetwork)
-	if bbcNetwork != int(types.TestNetwork) && bbcNetwork != int(types.ProdNetwork) && bbcNetwork != int(types.TmpTestNetwork) {
+	if bbcNetwork != int(types.TestNetwork) &&
+		bbcNetwork != int(types.ProdNetwork) &&
+		bbcNetwork != int(types.TmpTestNetwork) &&
+		bbcNetwork != int(types.GangesNetwork) {
 		printUsage()
 		return
 	}

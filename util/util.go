@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-func SendTelegramMessage(botId string, chatId string, msg string) {
+func SendTelegramMessage(botId, chatId, msg string) {
 	if botId == "" || chatId == "" || msg == "" {
 		return
 	}

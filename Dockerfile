@@ -1,4 +1,4 @@
-FROM golang:1.12-alpine
+FROM golang:1.13-alpine
 
 # Set up apk dependencies
 ENV PACKAGES make git libc-dev bash gcc linux-headers eudev-dev curl ca-certificates

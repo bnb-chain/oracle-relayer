@@ -46,14 +46,17 @@ func initFlags() {
 }
 
 func printUsage() {
-	fmt.Print("usage: ./relayer --bbc-network [0 for testnet, 1 for mainnet] --config-path config_file_path\n")
+	fmt.Print("usage: ./relayer --bbc-network [0 for testnet, 1 for mainnet] --config-type [local or aws] --config-path config_file_path\n")
 }
 
 func main() {
 	initFlags()
 
 	bbcNetwork := viper.GetInt(flagBBCNetwork)
-	if bbcNetwork != int(types.TestNetwork) && bbcNetwork != int(types.ProdNetwork) && bbcNetwork != int(types.TmpTestNetwork) {
+	if bbcNetwork != int(types.TestNetwork) &&
+		bbcNetwork != int(types.ProdNetwork) &&
+		bbcNetwork != int(types.TmpTestNetwork) &&
+		bbcNetwork != int(types.GangesNetwork) {
 		printUsage()
 		return
 	}
@@ -99,12 +102,7 @@ func main() {
 		}
 		config = util.ParseConfigFromFile(configFilePath)
 	}
-
-	configPath := viper.GetString(flagConfigPath)
-	if configPath == "" {
-		fmt.Println("config path should not be empty")
-		return
-	}
+	config.Validate()
 
 	// init logger
 	util.InitLogger(*config.LogConfig)
@@ -125,7 +123,7 @@ func main() {
 		fmt.Printf("new bbc executor error, err=%s\n", err.Error())
 		return
 	}
-	oracleRelayer := relayer.NewRelayer(db, bbcExecutor)
+	oracleRelayer := relayer.NewRelayer(db, bbcExecutor, config)
 	go oracleRelayer.Main()
 
 	adm := admin.NewAdmin(config, bbcExecutor)

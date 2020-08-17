@@ -42,7 +42,10 @@ func initFlags() {
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
-	viper.BindPFlags(pflag.CommandLine)
+	err := viper.BindPFlags(pflag.CommandLine)
+	if err != nil {
+		panic(fmt.Sprintf("bind flags error, err=%s", err))
+	}
 }
 
 func printUsage() {

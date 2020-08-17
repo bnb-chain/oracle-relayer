@@ -46,11 +46,11 @@ func (cfg *AlertConfig) Validate() {
 	}
 
 	if cfg.BlockUpdateTimeOut <= 0 {
-		panic(fmt.Sprintf("block_update_time_out should be larger than 0"))
+		panic("block_update_time_out should be larger than 0")
 	}
 
 	if cfg.PackageDelayAlertThreshold <= 0 {
-		panic(fmt.Sprintf("package_delay_alert_threshold should be larger than 0"))
+		panic("package_delay_alert_threshold should be larger than 0")
 	}
 }
 
@@ -97,12 +97,9 @@ func (cfg *ChainConfig) Validate() {
 
 	var emptyAddr ethcmm.Address
 	if cfg.BSCCrossChainContractAddress.String() == emptyAddr.String() {
-		panic(fmt.Sprintf("bsc_token_hub_contract_address should not be empty"))
+		panic("bsc_token_hub_contract_address should not be empty")
 	}
 
-	if cfg.BBCRpcAddr == "" {
-		panic("bbc_rpc_addr should not be empty")
-	}
 	if cfg.BBCRpcAddr == "" {
 		panic("bbc_rpc_addr should not be empty")
 	}
@@ -110,10 +107,13 @@ func (cfg *ChainConfig) Validate() {
 		panic(fmt.Sprintf("bbc_key_type of binance chain only supports %s and %s", KeyTypeMnemonic, KeyTypeAWSMnemonic))
 	}
 	if cfg.BBCKeyType == KeyTypeAWSMnemonic && cfg.BBCAWSRegion == "" {
-		panic(fmt.Sprintf("bbc_aws_region of binance chain should not be empty"))
+		panic("bbc_aws_region of binance chain should not be empty")
 	}
 	if cfg.BBCKeyType == KeyTypeAWSMnemonic && cfg.BBCAWSSecretName == "" {
-		panic(fmt.Sprintf("bbc_aws_secret_name of binance chain should not be empty"))
+		panic("bbc_aws_secret_name of binance chain should not be empty")
+	}
+	if cfg.BBCKeyType == KeyTypeMnemonic && cfg.BBCMnemonic == "" {
+		panic("bbc_mnemonic should not be empty")
 	}
 
 	if cfg.RelayInterval <= 0 {

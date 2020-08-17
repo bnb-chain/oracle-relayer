@@ -34,7 +34,12 @@ func (ob *Observer) Start() {
 
 func (ob *Observer) Fetch(startHeight int64) {
 	for {
-		curBlockLog := ob.GetCurrentBlockLog()
+		curBlockLog, err := ob.GetCurrentBlockLog()
+		if err != nil {
+			util.Logger.Errorf("get current block log error, err=%s", err.Error())
+			time.Sleep(common.ObserverFetchInterval)
+			continue
+		}
 
 		nextHeight := curBlockLog.Height + 1
 		if curBlockLog.Height == 0 && startHeight != 0 {
@@ -42,10 +47,10 @@ func (ob *Observer) Fetch(startHeight int64) {
 		}
 
 		util.Logger.Infof("fetch block, height=%d", nextHeight)
-		err := ob.fetchBlock(curBlockLog.Height, nextHeight, curBlockLog.BlockHash)
+		err = ob.fetchBlock(curBlockLog.Height, nextHeight, curBlockLog.BlockHash)
 		if err != nil {
 			util.Logger.Errorf("fetch block error, err=%s", err.Error())
-			time.Sleep(2 * time.Second)
+			time.Sleep(common.ObserverFetchInterval)
 		}
 	}
 }
@@ -124,8 +129,17 @@ func (ob *Observer) UpdateConfirmedNum(height int64) error {
 
 func (ob *Observer) Prune() {
 	for {
-		curBlockLog := ob.GetCurrentBlockLog()
-		ob.DB.Where("height < ?", curBlockLog.Height-common.ObserverMaxBlockNumber).Delete(model.BlockLog{})
+		curBlockLog, err := ob.GetCurrentBlockLog()
+		if err != nil {
+			util.Logger.Errorf("get current block log error, err=%s", err.Error())
+			time.Sleep(common.ObserverPruneInterval)
+
+			continue
+		}
+		err = ob.DB.Where("height < ?", curBlockLog.Height-common.ObserverMaxBlockNumber).Delete(model.BlockLog{}).Error
+		if err != nil {
+			util.Logger.Infof("prune block logs error, err=%s", err.Error())
+		}
 		time.Sleep(common.ObserverPruneInterval)
 	}
 }
@@ -150,15 +164,24 @@ func (ob *Observer) SaveBlockAndPackages(blockLog *model.BlockLog, packages []in
 	return tx.Commit().Error
 }
 
-func (ob *Observer) GetCurrentBlockLog() *model.BlockLog {
+func (ob *Observer) GetCurrentBlockLog() (*model.BlockLog, error) {
 	blockLog := model.BlockLog{}
-	ob.DB.Order("height desc").First(&blockLog)
-	return &blockLog
+	err := ob.DB.Order("height desc").First(&blockLog).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+	return &blockLog, nil
 }
 
 func (ob *Observer) Alert() {
 	for {
-		curOtherChainBlockLog := ob.GetCurrentBlockLog()
+		curOtherChainBlockLog, err := ob.GetCurrentBlockLog()
+		if err != nil {
+			util.Logger.Errorf("get current block log error, err=%s", err.Error())
+			time.Sleep(common.ObserverAlertInterval)
+
+			continue
+		}
 		if curOtherChainBlockLog.Height > 0 {
 			if time.Now().Unix()-curOtherChainBlockLog.CreateTime > ob.Config.AlertConfig.BlockUpdateTimeOut {
 				msg := fmt.Sprintf("[%s] last smart chain block fetched at %s, height=%d",

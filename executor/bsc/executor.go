@@ -27,7 +27,7 @@ type Executor struct {
 }
 
 func NewExecutor(provider string, config *util.Config) *Executor {
-	crossChinAbi, err := abi.JSON(strings.NewReader(abi2.CrossChainABI))
+	crossChainAbi, err := abi.JSON(strings.NewReader(abi2.CrossChainABI))
 	if err != nil {
 		panic("marshal abi error")
 	}
@@ -39,7 +39,7 @@ func NewExecutor(provider string, config *util.Config) *Executor {
 
 	return &Executor{
 		Config:        config,
-		CrossChainAbi: crossChinAbi,
+		CrossChainAbi: crossChainAbi,
 		Client:        client,
 
 		crossChainContractAddress: config.ChainConfig.BSCCrossChainContractAddress,

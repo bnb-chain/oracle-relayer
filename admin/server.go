@@ -43,7 +43,10 @@ func (admin *Admin) Endpoints(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write(jsonBytes)
+	_, err = w.Write(jsonBytes)
+	if err != nil {
+		util.Logger.Errorf("write response error, err=%s", err.Error())
+	}
 }
 
 func (admin *Admin) Serve() {

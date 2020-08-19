@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
 )
 
+// GetSecret retrieves the secret from aws secret manager
 func GetSecret(secretName, region string) (string, error) {
 	//Create a Secrets Manager client
 	sess, err := session.NewSession(&aws.Config{

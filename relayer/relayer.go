@@ -22,6 +22,7 @@ type Relayer struct {
 	Config      *util.Config
 }
 
+// NewRelayer returns the relayer instance
 func NewRelayer(db *gorm.DB, bbcExecutor executor.BbcExecutor, cfg *util.Config) *Relayer {
 	return &Relayer{
 		DB:          db,
@@ -30,12 +31,14 @@ func NewRelayer(db *gorm.DB, bbcExecutor executor.BbcExecutor, cfg *util.Config)
 	}
 }
 
+// Main starts the routines of relayer
 func (r *Relayer) Main() {
 	go r.RelayPackages()
 
 	go r.Alert()
 }
 
+// RelayPackages starts the main routine for processing the cross-chain packages
 func (r *Relayer) RelayPackages() {
 	for {
 		err := r.process(r.Config.ChainConfig.BSCChainId)
@@ -45,6 +48,7 @@ func (r *Relayer) RelayPackages() {
 	}
 }
 
+// process relays the next batch of packages to Binance Chain
 func (r *Relayer) process(chainId uint16) error {
 	sequence, err := r.BBCExecutor.GetCurrentSequence(chainId)
 	if err != nil {
@@ -117,6 +121,7 @@ func (r *Relayer) process(chainId uint16) error {
 	return err
 }
 
+// Alert sends alert to tg group if there is any package delayed
 func (r *Relayer) Alert() {
 	for {
 		time.Sleep(common.PackageDelayAlertInterval)

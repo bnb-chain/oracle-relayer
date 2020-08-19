@@ -18,6 +18,7 @@ type Observer struct {
 	BscExecutor executor.BscExecutor
 }
 
+// NewObserver returns the observer instance
 func NewObserver(db *gorm.DB, cfg *util.Config, bscExecutor executor.BscExecutor) *Observer {
 	return &Observer{
 		DB:          db,
@@ -26,12 +27,14 @@ func NewObserver(db *gorm.DB, cfg *util.Config, bscExecutor executor.BscExecutor
 	}
 }
 
+// Start starts the routines of observer
 func (ob *Observer) Start() {
 	go ob.Fetch(ob.Config.ChainConfig.BSCStartHeight)
 	go ob.Prune()
 	go ob.Alert()
 }
 
+// Fetch starts the main routine for fetching blocks of BSC
 func (ob *Observer) Fetch(startHeight int64) {
 	for {
 		curBlockLog, err := ob.GetCurrentBlockLog()
@@ -55,6 +58,8 @@ func (ob *Observer) Fetch(startHeight int64) {
 	}
 }
 
+// fetchBlock fetches the next block of BSC and saves it to database. if the next block hash
+// does not match to the parent hash, the current block will be deleted for there is a fork.
 func (ob *Observer) fetchBlock(curHeight, nextHeight int64, curBlockHash string) error {
 	blockAndPackageLogs, err := ob.BscExecutor.GetBlockAndPackages(nextHeight)
 	if err != nil {
@@ -85,6 +90,7 @@ func (ob *Observer) fetchBlock(curHeight, nextHeight int64, curBlockHash string)
 	return nil
 }
 
+// DeleteBlockAndPackages deletes the block and txs of the given height
 func (ob *Observer) DeleteBlockAndPackages(height int64) error {
 	tx := ob.DB.Begin()
 	if err := tx.Error; err != nil {
@@ -104,6 +110,7 @@ func (ob *Observer) DeleteBlockAndPackages(height int64) error {
 	return tx.Commit().Error
 }
 
+// UpdateConfirmedNum updates confirmation number of cross-chain packages.
 func (ob *Observer) UpdateConfirmedNum(height int64) error {
 	err := ob.DB.Model(model.CrossChainPackageLog{}).Where("status = ?", model.PackageStatusInit).Updates(
 		map[string]interface{}{
@@ -127,6 +134,7 @@ func (ob *Observer) UpdateConfirmedNum(height int64) error {
 	return nil
 }
 
+// Prune prunes the outdated blocks
 func (ob *Observer) Prune() {
 	for {
 		curBlockLog, err := ob.GetCurrentBlockLog()
@@ -144,6 +152,7 @@ func (ob *Observer) Prune() {
 	}
 }
 
+// SaveBlockAndPackages saves block and packages to database
 func (ob *Observer) SaveBlockAndPackages(blockLog *model.BlockLog, packages []interface{}) error {
 	tx := ob.DB.Begin()
 	if err := tx.Error; err != nil {
@@ -164,6 +173,7 @@ func (ob *Observer) SaveBlockAndPackages(blockLog *model.BlockLog, packages []in
 	return tx.Commit().Error
 }
 
+// GetCurrentBlockLog returns the highest block log
 func (ob *Observer) GetCurrentBlockLog() (*model.BlockLog, error) {
 	blockLog := model.BlockLog{}
 	err := ob.DB.Order("height desc").First(&blockLog).Error
@@ -173,6 +183,7 @@ func (ob *Observer) GetCurrentBlockLog() (*model.BlockLog, error) {
 	return &blockLog, nil
 }
 
+// Alert sends alerts to tg group if there is no new block fetched in a specific time
 func (ob *Observer) Alert() {
 	for {
 		curOtherChainBlockLog, err := ob.GetCurrentBlockLog()

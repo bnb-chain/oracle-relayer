@@ -26,6 +26,7 @@ type Executor struct {
 	crossChainContractAddress ethcmm.Address
 }
 
+// NewExecutor returns the bsc executor instance
 func NewExecutor(provider string, config *util.Config) *Executor {
 	crossChainAbi, err := abi.JSON(strings.NewReader(abi2.CrossChainABI))
 	if err != nil {
@@ -46,6 +47,7 @@ func NewExecutor(provider string, config *util.Config) *Executor {
 	}
 }
 
+// GetBlockAndPackages returns the block and cross-chain packages of the given height
 func (e *Executor) GetBlockAndPackages(height int64) (*common.BlockAndPackageLogs, error) {
 	ctxWithTimeout, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -69,6 +71,7 @@ func (e *Executor) GetBlockAndPackages(height int64) (*common.BlockAndPackageLog
 	}, nil
 }
 
+// GetLogs return the cross-chain packages of the given height
 func (e *Executor) GetLogs(header *types.Header) ([]interface{}, error) {
 	topics := [][]ethcmm.Hash{{CrossChainPackageEventHash}}
 

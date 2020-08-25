@@ -155,6 +155,7 @@ type AdminConfig struct {
 	ListenAddr string `json:"listen_addr"`
 }
 
+// ParseConfigFromFile returns the config from json file
 func ParseConfigFromFile(filePath string) *Config {
 	bz, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -168,6 +169,7 @@ func ParseConfigFromFile(filePath string) *Config {
 	return &config
 }
 
+// ParseConfigFromJson returns the config from json string
 func ParseConfigFromJson(content string) *Config {
 	var config Config
 	if err := json.Unmarshal([]byte(content), &config); err != nil {

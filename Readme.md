@@ -27,6 +27,12 @@ $ make build_docker
 There is a config template in config directory, you should create your own config to run your relayer correctly. 
 You can refer to [config doc](./docs/config.md) for more details.
 
+### Recommendations
+If you are going to deploy your oracle relayer in production, AWS Secret Manager is recommended. You can use AWS Secret
+Manager to host your mnemonic. 
+
+For BBC and BSC providers, you should use trusted nodes and TLS connection is recommended.
+
 ## Run
 
 Run locally:

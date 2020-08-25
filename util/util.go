@@ -7,6 +7,7 @@ import (
 	"net/url"
 )
 
+// SendTelegramMessage sends message to telegram group
 func SendTelegramMessage(botId, chatId, msg string) {
 	if botId == "" || chatId == "" || msg == "" {
 		return

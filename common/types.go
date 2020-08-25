@@ -6,6 +6,7 @@ const (
 	ObserverMaxBlockNumber = 10000
 	ObserverPruneInterval  = 10 * time.Second
 	ObserverAlertInterval  = 5 * time.Second
+	ObserverFetchInterval  = 2 * time.Second
 
 	PackageDelayAlertInterval = 5 * time.Second
 

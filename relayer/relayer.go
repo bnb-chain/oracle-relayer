@@ -106,12 +106,15 @@ func (r *Relayer) process(chainId uint16) error {
 		return err
 	}
 
-	r.DB.Model(model.CrossChainPackageLog{}).Where("oracle_sequence = ? and chain_id = ?", sequence, chainId).Update(map[string]interface{}{
+	err = r.DB.Model(model.CrossChainPackageLog{}).Where("oracle_sequence = ? and chain_id = ?", sequence, chainId).Update(map[string]interface{}{
 		"status":        model.PackageStatusClaimed,
 		"claim_tx_hash": txHash,
 		"update_time":   time.Now().Unix(),
-	})
-	return nil
+	}).Error
+	if err != nil {
+		util.Logger.Errorf("update CrossChainPackageLog error, err=%s", err.Error())
+	}
+	return err
 }
 
 func (r *Relayer) Alert() {

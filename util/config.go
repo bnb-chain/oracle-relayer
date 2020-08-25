@@ -95,6 +95,11 @@ func (cfg *ChainConfig) Validate() {
 		panic("bsc_confirm_num should be larger than 0")
 	}
 
+	// replace bsc_confirm_num if it is less than DefaultConfirmNum
+	if cfg.BSCConfirmNum <= common.DefaultConfirmNum {
+		cfg.BSCConfirmNum = common.DefaultConfirmNum
+	}
+
 	var emptyAddr ethcmm.Address
 	if cfg.BSCCrossChainContractAddress.String() == emptyAddr.String() {
 		panic("bsc_token_hub_contract_address should not be empty")

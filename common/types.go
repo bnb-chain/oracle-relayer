@@ -8,6 +8,8 @@ const (
 	ObserverAlertInterval  = 5 * time.Second
 
 	PackageDelayAlertInterval = 5 * time.Second
+
+	DefaultConfirmNum int64 = 15
 )
 
 const (

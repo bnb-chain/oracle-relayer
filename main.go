@@ -117,11 +117,11 @@ func main() {
 	defer db.Close()
 	model.InitTables(db)
 
-	bscExecutor := bsc.NewExecutor(config.ChainConfig.BSCProvider, config)
+	bscExecutor := bsc.NewExecutor(config.ChainConfig.BSCProviders, config)
 	ob := observer.NewObserver(db, config, bscExecutor)
 	go ob.Start()
 
-	bbcExecutor, err := bbc.NewExecutor(config.ChainConfig.BBCRpcAddr, types.Network, config)
+	bbcExecutor, err := bbc.NewExecutor(config.ChainConfig.BBCRpcAddrs, types.Network, config)
 	if err != nil {
 		fmt.Printf("new bbc executor error, err=%s\n", err.Error())
 		return

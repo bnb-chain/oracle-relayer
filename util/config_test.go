@@ -94,20 +94,20 @@ func TestChainConfig(t *testing.T) {
 		}, {
 			&ChainConfig{
 				BSCStartHeight: 1,
-				BSCProvider:    "",
+				BSCProviders:   []string{},
 			},
 			true,
 		}, {
 			&ChainConfig{
 				BSCStartHeight: 1,
-				BSCProvider:    "provider",
+				BSCProviders:   []string{"provider"},
 				BSCConfirmNum:  0,
 			},
 			true,
 		}, {
 			&ChainConfig{
 				BSCStartHeight:               1,
-				BSCProvider:                  "provider",
+				BSCProviders:                 []string{"provider"},
 				BSCConfirmNum:                1,
 				BSCCrossChainContractAddress: ethcmm.Address{},
 			},
@@ -115,29 +115,29 @@ func TestChainConfig(t *testing.T) {
 		}, {
 			&ChainConfig{
 				BSCStartHeight:               1,
-				BSCProvider:                  "provider",
+				BSCProviders:                 []string{"provider"},
 				BSCConfirmNum:                1,
 				BSCCrossChainContractAddress: ethcmm.Address{1},
-				BBCRpcAddr:                   "rpc addr",
+				BBCRpcAddrs:                  []string{"rpc addr"},
 			},
 			true,
 		}, {
 			&ChainConfig{
 				BSCStartHeight:               1,
-				BSCProvider:                  "provider",
+				BSCProviders:                 []string{"provider"},
 				BSCConfirmNum:                1,
 				BSCCrossChainContractAddress: ethcmm.Address{1},
-				BBCRpcAddr:                   "rpc addr",
+				BBCRpcAddrs:                  []string{"rpc addr"},
 				BBCKeyType:                   "wrong",
 			},
 			true,
 		}, {
 			&ChainConfig{
 				BSCStartHeight:               1,
-				BSCProvider:                  "provider",
+				BSCProviders:                 []string{"provider"},
 				BSCConfirmNum:                1,
 				BSCCrossChainContractAddress: ethcmm.Address{1},
-				BBCRpcAddr:                   "rpc addr",
+				BBCRpcAddrs:                  []string{"rpc addr"},
 				BBCKeyType:                   KeyTypeAWSMnemonic,
 				BBCAWSRegion:                 "",
 			},
@@ -145,10 +145,10 @@ func TestChainConfig(t *testing.T) {
 		}, {
 			&ChainConfig{
 				BSCStartHeight:               1,
-				BSCProvider:                  "provider",
+				BSCProviders:                 []string{"provider"},
 				BSCConfirmNum:                1,
 				BSCCrossChainContractAddress: ethcmm.Address{1},
-				BBCRpcAddr:                   "rpc addr",
+				BBCRpcAddrs:                  []string{"rpc addr"},
 				BBCKeyType:                   KeyTypeAWSMnemonic,
 				BBCAWSRegion:                 "region",
 				BBCAWSSecretName:             "",
@@ -157,10 +157,10 @@ func TestChainConfig(t *testing.T) {
 		}, {
 			&ChainConfig{
 				BSCStartHeight:               1,
-				BSCProvider:                  "provider",
+				BSCProviders:                 []string{"provider"},
 				BSCConfirmNum:                1,
 				BSCCrossChainContractAddress: ethcmm.Address{1},
-				BBCRpcAddr:                   "rpc addr",
+				BBCRpcAddrs:                  []string{"rpc addr"},
 				BBCKeyType:                   KeyTypeMnemonic,
 				BBCMnemonic:                  "",
 			},
@@ -168,10 +168,10 @@ func TestChainConfig(t *testing.T) {
 		}, {
 			&ChainConfig{
 				BSCStartHeight:               1,
-				BSCProvider:                  "provider",
+				BSCProviders:                 []string{"provider"},
 				BSCConfirmNum:                1,
 				BSCCrossChainContractAddress: ethcmm.Address{1},
-				BBCRpcAddr:                   "rpc addr",
+				BBCRpcAddrs:                  []string{"rpc addr"},
 				BBCKeyType:                   KeyTypeMnemonic,
 				BBCMnemonic:                  "mnemonic",
 				RelayInterval:                0,
@@ -180,10 +180,10 @@ func TestChainConfig(t *testing.T) {
 		}, {
 			&ChainConfig{
 				BSCStartHeight:               1,
-				BSCProvider:                  "provider",
+				BSCProviders:                 []string{"provider"},
 				BSCConfirmNum:                1,
 				BSCCrossChainContractAddress: ethcmm.Address{1},
-				BBCRpcAddr:                   "rpc addr",
+				BBCRpcAddrs:                  []string{"rpc addr"},
 				BBCKeyType:                   KeyTypeMnemonic,
 				BBCMnemonic:                  "mnemonic",
 				RelayInterval:                1,

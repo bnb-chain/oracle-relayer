@@ -5,11 +5,11 @@
   },
   "chain_config": {
     "bsc_start_height": 1,
-    "bsc_provider": "bsc_provider",
+    "bsc_providers": ["bsc_provider"],
     "bsc_confirm_num": 2,
     "bsc_cross_chain_contract_address": "0x0000000000000000000000000000000000001004",
 
-    "bbc_rpc_addr": "bbc_rpc_addr",
+    "bbc_rpc_addrs": ["bbc_rpc_addr"],
     "bbc_key_type": "mnemonic",
     "bbc_aws_region": "",
     "bbc_aws_secret_name": "",
@@ -34,7 +34,8 @@
     "moniker": "moniker",
     "telegram_bot_id": "",
     "telegram_chat_id": "",
+    "pager_duty_auth_token": "",
     "block_update_time_out": 60,
-    "package_delay_alert_threshold": 30,
+    "package_delay_alert_threshold": 30
   }
 }

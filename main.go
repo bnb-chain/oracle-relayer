@@ -109,6 +109,7 @@ func main() {
 
 	// init logger
 	util.InitLogger(*config.LogConfig)
+	util.InitAlert(config.AlertConfig)
 
 	db, err := gorm.Open(config.DBConfig.Dialect, config.DBConfig.DBPath)
 	if err != nil {

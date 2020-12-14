@@ -150,7 +150,8 @@ func (r *Relayer) Alert() {
 			alertMsg := fmt.Sprintf("[%s] cross chain package was confirmed but not relayed, confiremd_time=%s, sequence=%d",
 				r.Config.AlertConfig.Moniker, time.Unix(claimLog.UpdateTime, 0).String(), claimLog.OracleSequence)
 
-			util.SendTelegramMessage(r.Config.AlertConfig.TelegramBotId, r.Config.AlertConfig.TelegramChatId, alertMsg)
+			util.SendTelegramMessage(alertMsg)
+			util.SendPagerDutyAlert(alertMsg, util.IncidentDedupKeyRelayError)
 		}
 	}
 }

@@ -3,6 +3,7 @@ module github.com/binance-chain/oracle-relayer
 go 1.13
 
 require (
+	github.com/PagerDuty/go-pagerduty v1.3.0
 	github.com/aws/aws-sdk-go v1.25.48
 	github.com/binance-chain/go-sdk v0.0.0-00010101000000-000000000000
 	github.com/ethereum/go-ethereum v1.9.12
@@ -17,8 +18,9 @@ require (
 	github.com/spf13/viper v1.0.0
 	github.com/stretchr/testify v1.4.0
 	github.com/tendermint/tendermint v0.32.3
-	golang.org/x/mod v0.3.0 // indirect
-	golang.org/x/tools v0.0.0-20200702044944-0cc1aa72b347 // indirect
+	golang.org/x/mod v0.4.0 // indirect
+	golang.org/x/net v0.0.0-20201021035429-f5854403a974 // indirect
+	golang.org/x/tools v0.0.0-20201208233053-a543418bbed2 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 

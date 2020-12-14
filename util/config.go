@@ -36,6 +36,8 @@ type AlertConfig struct {
 	TelegramBotId  string `json:"telegram_bot_id"`
 	TelegramChatId string `json:"telegram_chat_id"`
 
+	PagerDutyAuthToken string `json:"pager_duty_auth_token"`
+
 	BlockUpdateTimeOut         int64 `json:"block_update_time_out"`
 	PackageDelayAlertThreshold int64 `json:"package_delay_alert_threshold"`
 }
@@ -70,16 +72,16 @@ func (cfg *DBConfig) Validate() {
 
 type ChainConfig struct {
 	BSCStartHeight               int64          `json:"bsc_start_height"`
-	BSCProvider                  string         `json:"bsc_provider"`
+	BSCProviders                 []string       `json:"bsc_providers"`
 	BSCConfirmNum                int64          `json:"bsc_confirm_num"`
 	BSCChainId                   uint16         `json:"bsc_chain_id"`
 	BSCCrossChainContractAddress ethcmm.Address `json:"bsc_cross_chain_contract_address"`
 
-	BBCRpcAddr       string `json:"bbc_rpc_addr"`
-	BBCMnemonic      string `json:"bbc_mnemonic"`
-	BBCKeyType       string `json:"bbc_key_type"`
-	BBCAWSRegion     string `json:"bbc_aws_region"`
-	BBCAWSSecretName string `json:"bbc_aws_secret_name"`
+	BBCRpcAddrs      []string `json:"bbc_rpc_addrs"`
+	BBCMnemonic      string   `json:"bbc_mnemonic"`
+	BBCKeyType       string   `json:"bbc_key_type"`
+	BBCAWSRegion     string   `json:"bbc_aws_region"`
+	BBCAWSSecretName string   `json:"bbc_aws_secret_name"`
 
 	RelayInterval int64 `json:"relay_interval"`
 }
@@ -88,7 +90,7 @@ func (cfg *ChainConfig) Validate() {
 	if cfg.BSCStartHeight < 0 {
 		panic("bsc_start_height should not be less than 0")
 	}
-	if cfg.BSCProvider == "" {
+	if len(cfg.BSCProviders) == 0 {
 		panic("bsc_provider should not be empty")
 	}
 	if cfg.BSCConfirmNum <= 0 {
@@ -105,7 +107,7 @@ func (cfg *ChainConfig) Validate() {
 		panic("bsc_token_hub_contract_address should not be empty")
 	}
 
-	if cfg.BBCRpcAddr == "" {
+	if len(cfg.BBCRpcAddrs) == 0 {
 		panic("bbc_rpc_addr should not be empty")
 	}
 	if cfg.BBCKeyType != KeyTypeMnemonic && cfg.BBCKeyType != KeyTypeAWSMnemonic {

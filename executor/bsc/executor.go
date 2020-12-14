@@ -3,6 +3,7 @@ package bsc
 import (
 	"context"
 	"math/big"
+	"math/rand"
 	"strings"
 	"time"
 
@@ -21,30 +22,48 @@ type Executor struct {
 	Config *util.Config
 
 	CrossChainAbi abi.ABI
-	Client        *ethclient.Client
+	Clients       []*ethclient.Client
 
 	crossChainContractAddress ethcmm.Address
 }
 
 // NewExecutor returns the bsc executor instance
-func NewExecutor(provider string, config *util.Config) *Executor {
+func NewExecutor(providers []string, config *util.Config) *Executor {
 	crossChainAbi, err := abi.JSON(strings.NewReader(abi2.CrossChainABI))
 	if err != nil {
 		panic("marshal abi error")
 	}
 
-	client, err := ethclient.Dial(provider)
-	if err != nil {
-		panic("new eth client error")
-	}
+	clients := initClients(providers)
 
 	return &Executor{
 		Config:        config,
 		CrossChainAbi: crossChainAbi,
-		Client:        client,
+		Clients:       clients,
 
 		crossChainContractAddress: config.ChainConfig.BSCCrossChainContractAddress,
 	}
+}
+
+func initClients(providers []string) []*ethclient.Client {
+	clients := make([]*ethclient.Client, 0)
+
+	for _, provider := range providers {
+		client, err := ethclient.Dial(provider)
+		if err != nil {
+			panic("new eth client error")
+		}
+		clients = append(clients, client)
+	}
+
+	return clients
+}
+
+func (e *Executor) getClient() *ethclient.Client {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	idx := r.Intn(len(e.Clients))
+	return e.Clients[idx]
 }
 
 // GetBlockAndPackages returns the block and cross-chain packages of the given height
@@ -52,12 +71,13 @@ func (e *Executor) GetBlockAndPackages(height int64) (*common.BlockAndPackageLog
 	ctxWithTimeout, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	header, err := e.Client.HeaderByNumber(ctxWithTimeout, big.NewInt(height))
+	client := e.getClient()
+	header, err := client.HeaderByNumber(ctxWithTimeout, big.NewInt(height))
 	if err != nil {
 		return nil, err
 	}
 
-	packageLogs, err := e.GetLogs(header)
+	packageLogs, err := e.GetLogs(client, header)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +92,7 @@ func (e *Executor) GetBlockAndPackages(height int64) (*common.BlockAndPackageLog
 }
 
 // GetLogs return the cross-chain packages of the given height
-func (e *Executor) GetLogs(header *types.Header) ([]interface{}, error) {
+func (e *Executor) GetLogs(client *ethclient.Client, header *types.Header) ([]interface{}, error) {
 	topics := [][]ethcmm.Hash{{CrossChainPackageEventHash}}
 
 	blockHash := header.Hash()
@@ -80,7 +100,7 @@ func (e *Executor) GetLogs(header *types.Header) ([]interface{}, error) {
 	ctxWithTimeout, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	logs, err := e.Client.FilterLogs(ctxWithTimeout, ethereum.FilterQuery{
+	logs, err := client.FilterLogs(ctxWithTimeout, ethereum.FilterQuery{
 		BlockHash: &blockHash,
 		Topics:    topics,
 		Addresses: []ethcmm.Address{e.crossChainContractAddress},

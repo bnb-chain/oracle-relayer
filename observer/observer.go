@@ -197,7 +197,8 @@ func (ob *Observer) Alert() {
 			if time.Now().Unix()-curOtherChainBlockLog.CreateTime > ob.Config.AlertConfig.BlockUpdateTimeOut {
 				msg := fmt.Sprintf("[%s] last smart chain block fetched at %s, height=%d",
 					ob.Config.AlertConfig.Moniker, time.Unix(curOtherChainBlockLog.CreateTime, 0).String(), curOtherChainBlockLog.Height)
-				util.SendTelegramMessage(ob.Config.AlertConfig.TelegramBotId, ob.Config.AlertConfig.TelegramChatId, msg)
+				util.SendTelegramMessage(msg)
+				util.SendPagerDutyAlert(msg, util.IncidentDedupKeyBlockTimeout)
 			}
 		}
 

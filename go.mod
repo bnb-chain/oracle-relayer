@@ -11,16 +11,12 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/jinzhu/gorm v1.9.12
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
-	github.com/petermattis/goid v0.0.0-20180202154549-b0b1615b78e5 // indirect
 	github.com/prometheus/tsdb v0.7.1 // indirect
-	github.com/sasha-s/go-deadlock v0.2.0 // indirect
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.0.0
 	github.com/stretchr/testify v1.4.0
 	github.com/tendermint/tendermint v0.32.3
-	golang.org/x/mod v0.4.0 // indirect
 	golang.org/x/net v0.0.0-20201021035429-f5854403a974 // indirect
-	golang.org/x/tools v0.0.0-20201208233053-a543418bbed2 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 

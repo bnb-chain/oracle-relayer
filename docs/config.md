@@ -25,12 +25,12 @@ Chain common config for deputy. Pls note that `swap_amount` and `fixed_fee` belo
 is 8 which means 100000000 is 1 actually. You need to handle decimal and amount with decimal.
 
 + bsc_start_height: height of bsc chain you want to start syncing when you start your relayer.
-+ bsc_provider: provider address of bsc chain.
++ bsc_providers: array of provider address of bsc chain.
 + bsc_confirm_num: confirm number of bsc chain.
 + bsc_token_hub_contract_address: token hub contract address of bsc.
 + bsc_validator_set_contract_address: validator set contract address of bsc.
 
-+ bbc_rpc_addr: rpc address of bbc.
++ bbc_rpc_addrs: array of rpc address of bbc.
 + bbc_key_type:  `mnemonic` and `aws_mnemonic` supported. `mnemonic` will use mnemonic provided below and `aws_mnemonic`
  will fetch mnemonic from aws secret manager.
 + bbc_aws_region: region of aws.

@@ -91,7 +91,7 @@ func (cfg *ChainConfig) Validate() {
 		panic("bsc_start_height should not be less than 0")
 	}
 	if len(cfg.BSCProviders) == 0 {
-		panic("bsc_provider should not be empty")
+		panic("bsc_providers should not be empty")
 	}
 	if cfg.BSCConfirmNum <= 0 {
 		panic("bsc_confirm_num should be larger than 0")
@@ -108,7 +108,7 @@ func (cfg *ChainConfig) Validate() {
 	}
 
 	if len(cfg.BBCRpcAddrs) == 0 {
-		panic("bbc_rpc_addr should not be empty")
+		panic("bbc_rpc_addrs should not be empty")
 	}
 	if cfg.BBCKeyType != KeyTypeMnemonic && cfg.BBCKeyType != KeyTypeAWSMnemonic {
 		panic(fmt.Sprintf("bbc_key_type of binance chain only supports %s and %s", KeyTypeMnemonic, KeyTypeAWSMnemonic))

@@ -16,11 +16,11 @@ var testConfig = `
   },
   "chain_config": {
     "bsc_start_height": 1,
-    "bsc_provider": "bsc_provider",
+    "bsc_providers": ["bsc_provider"],
     "bsc_confirm_num": 2,
     "bsc_cross_chain_contract_address": "0x0000000000000000000000000000000000001004",
 
-    "bbc_rpc_addr": "bbc_rpc_addr",
+    "bbc_rpc_addrs": ["bbc_rpc_addr"],
     "bbc_key_type": "mnemonic",
     "bbc_aws_region": "",
     "bbc_aws_secret_name": "",

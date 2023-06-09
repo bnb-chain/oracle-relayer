@@ -7,8 +7,8 @@ package mock
 import (
 	reflect "reflect"
 
-	types "github.com/binance-chain/go-sdk/common/types"
-	msg "github.com/binance-chain/go-sdk/types/msg"
+	types "github.com/bnb-chain/go-sdk/common/types"
+	msg "github.com/bnb-chain/go-sdk/types/msg"
 	common "github.com/binance-chain/oracle-relayer/common"
 	gomock "github.com/golang/mock/gomock"
 )

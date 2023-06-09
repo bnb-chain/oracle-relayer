@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/binance-chain/go-sdk/common/types"
+	"github.com/bnb-chain/go-sdk/common/types"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -64,7 +64,7 @@ func main() {
 		return
 	}
 
-	types.Network = types.ChainNetwork(bbcNetwork)
+	types.SetNetwork(types.ChainNetwork(bbcNetwork))
 
 	configType := viper.GetString(flagConfigType)
 	if configType == "" {
@@ -122,7 +122,7 @@ func main() {
 	ob := observer.NewObserver(db, config, bscExecutor)
 	go ob.Start()
 
-	bbcExecutor, err := bbc.NewExecutor(config.ChainConfig.BBCRpcAddrs, types.Network, config)
+	bbcExecutor, err := bbc.NewExecutor(config.ChainConfig.BBCRpcAddrs, types.ChainNetwork(bbcNetwork), config)
 	if err != nil {
 		fmt.Printf("new bbc executor error, err=%s\n", err.Error())
 		return

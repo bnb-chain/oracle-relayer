@@ -5,12 +5,11 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/binance-chain/go-sdk/client/rpc"
-	"github.com/binance-chain/go-sdk/common/types"
-	"github.com/binance-chain/go-sdk/keys"
-	"github.com/binance-chain/go-sdk/types/msg"
-
 	"github.com/binance-chain/oracle-relayer/util"
+	"github.com/bnb-chain/go-sdk/client/rpc"
+	"github.com/bnb-chain/go-sdk/common/types"
+	"github.com/bnb-chain/go-sdk/keys"
+	"github.com/bnb-chain/go-sdk/types/msg"
 )
 
 type Executor struct {

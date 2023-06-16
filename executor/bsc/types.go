@@ -47,7 +47,7 @@ func (ev *CrossChainPackageEvent) ToTxLog(log *types.Log) interface{} {
 func ParseCrossChainPackageEvent(abi *abi.ABI, log *types.Log) (*CrossChainPackageEvent, error) {
 	var ev CrossChainPackageEvent
 
-	err := abi.Unpack(&ev, CrossChainPackageEventName, log.Data)
+	err := abi.UnpackIntoInterface(&ev, CrossChainPackageEventName, log.Data)
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,7 @@
 package abi
 
 import (
+	"errors"
 	"math/big"
 	"strings"
 
@@ -17,18 +18,24 @@ import (
 
 // Reference imports to suppress errors if they are not otherwise used.
 var (
+	_ = errors.New
 	_ = big.NewInt
 	_ = strings.NewReader
 	_ = ethereum.NotFound
-	_ = abi.U256
 	_ = bind.Bind
 	_ = common.Big1
 	_ = types.BloomLookup
 	_ = event.NewSubscription
 )
 
+// CrossChainMetaData contains all meta data concerning the CrossChain contract.
+var CrossChainMetaData = &bind.MetaData{
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"chainId\",\"type\":\"uint16\"},{\"indexed\":true,\"name\":\"oracleSequence\",\"type\":\"uint64\"},{\"indexed\":true,\"name\":\"packageSequence\",\"type\":\"uint64\"},{\"indexed\":true,\"name\":\"channelId\",\"type\":\"uint8\"},{\"indexed\":false,\"name\":\"payload\",\"type\":\"bytes\"}],\"name\":\"crossChainPackage\",\"type\":\"event\"}]",
+}
+
 // CrossChainABI is the input ABI used to generate the binding from.
-const CrossChainABI = "[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"name\":\"chainId\",\"type\":\"uint16\"},{\"indexed\":true,\"name\":\"oracleSequence\",\"type\":\"uint64\"},{\"indexed\":true,\"name\":\"packageSequence\",\"type\":\"uint64\"},{\"indexed\":true,\"name\":\"channelId\",\"type\":\"uint8\"},{\"indexed\":false,\"name\":\"payload\",\"type\":\"bytes\"}],\"name\":\"crossChainPackage\",\"type\":\"event\"}]"
+// Deprecated: Use CrossChainMetaData.ABI instead.
+var CrossChainABI = CrossChainMetaData.ABI
 
 // CrossChain is an auto generated Go binding around an Ethereum contract.
 type CrossChain struct {
@@ -138,7 +145,7 @@ func bindCrossChain(address common.Address, caller bind.ContractCaller, transact
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_CrossChain *CrossChainRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+func (_CrossChain *CrossChainRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
 	return _CrossChain.Contract.CrossChainCaller.contract.Call(opts, result, method, params...)
 }
 
@@ -157,7 +164,7 @@ func (_CrossChain *CrossChainRaw) Transact(opts *bind.TransactOpts, method strin
 // sets the output to result. The result type might be a single field for simple
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
-func (_CrossChain *CrossChainCallerRaw) Call(opts *bind.CallOpts, result interface{}, method string, params ...interface{}) error {
+func (_CrossChain *CrossChainCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
 	return _CrossChain.Contract.contract.Call(opts, result, method, params...)
 }
 
@@ -332,5 +339,6 @@ func (_CrossChain *CrossChainFilterer) ParseCrossChainPackage(log types.Log) (*C
 	if err := _CrossChain.contract.UnpackLog(event, "crossChainPackage", log); err != nil {
 		return nil, err
 	}
+	event.Raw = log
 	return event, nil
 }

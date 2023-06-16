@@ -4,9 +4,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/binance-chain/go-sdk/types/msg"
+	"github.com/bnb-chain/go-sdk/types/msg"
 
-	"github.com/binance-chain/go-sdk/common/types"
+	"github.com/bnb-chain/go-sdk/common/types"
 
 	"github.com/binance-chain/oracle-relayer/model"
 

@@ -111,13 +111,13 @@ func (cfg *ChainConfig) Validate() {
 		panic("bbc_rpc_addrs should not be empty")
 	}
 	if cfg.BBCKeyType != KeyTypeMnemonic && cfg.BBCKeyType != KeyTypeAWSMnemonic {
-		panic(fmt.Sprintf("bbc_key_type of binance chain only supports %s and %s", KeyTypeMnemonic, KeyTypeAWSMnemonic))
+		panic(fmt.Sprintf("bbc_key_type of bnb beacon chain chain only supports %s and %s", KeyTypeMnemonic, KeyTypeAWSMnemonic))
 	}
 	if cfg.BBCKeyType == KeyTypeAWSMnemonic && cfg.BBCAWSRegion == "" {
-		panic("bbc_aws_region of binance chain should not be empty")
+		panic("bbc_aws_region of bnb beacon chain chain should not be empty")
 	}
 	if cfg.BBCKeyType == KeyTypeAWSMnemonic && cfg.BBCAWSSecretName == "" {
-		panic("bbc_aws_secret_name of binance chain should not be empty")
+		panic("bbc_aws_secret_name of bnb beacon chain chain should not be empty")
 	}
 	if cfg.BBCKeyType == KeyTypeMnemonic && cfg.BBCMnemonic == "" {
 		panic("bbc_mnemonic should not be empty")

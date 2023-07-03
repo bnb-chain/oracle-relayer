@@ -48,7 +48,7 @@ func (r *Relayer) RelayPackages() {
 	}
 }
 
-// process relays the next batch of packages to Binance Chain
+// process relays the next batch of packages to BNB Beacon Chain
 func (r *Relayer) process(chainId uint16) error {
 	sequence, err := r.BBCExecutor.GetCurrentSequence(chainId)
 	if err != nil {

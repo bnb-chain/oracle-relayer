@@ -21,7 +21,7 @@ References:
 
 ## Chain config
 
-Chain common config for deputy. Pls note that `swap_amount` and `fixed_fee` below are number with decimal. For example, decimal in binance chain 
+Chain common config for deputy. Pls note that `swap_amount` and `fixed_fee` below are number with decimal. For example, decimal in BNB chain 
 is 8 which means 100000000 is 1 actually. You need to handle decimal and amount with decimal.
 
 + bsc_start_height: height of bsc chain you want to start syncing when you start your relayer.

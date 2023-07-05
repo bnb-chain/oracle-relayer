@@ -77,7 +77,7 @@ func (e *Executor) GetProphecy(chainId uint16, sequence int64) (*msg.Prophecy, e
 	return prop, err
 }
 
-// Claim sends claim to Binance Chain
+// Claim sends claim to BNB Beacon Chain
 func (e *Executor) Claim(chainId uint16, sequence uint64, payload []byte) (string, error) {
 	client := e.getClient()
 
@@ -99,7 +99,7 @@ func (e *Executor) Claim(chainId uint16, sequence uint64, payload []byte) (strin
 	return res.Hash.String(), nil
 }
 
-// GetCurrentSequence return the current oracle sequence of Binance Chain
+// GetCurrentSequence return the current oracle sequence of BNB Beacon Chain
 func (e *Executor) GetCurrentSequence(chainId uint16) (int64, error) {
 	sequence, err := e.getClient().GetCurrentOracleSequence(types.IbcChainID(chainId))
 	if err != nil {

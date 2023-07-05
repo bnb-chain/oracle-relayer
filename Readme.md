@@ -1,6 +1,6 @@
 # Oracle Relayer
 
-Oracle Relayer is responsible for relaying events of bsc to binance chain.
+Oracle Relayer is responsible for relaying events of bsc to BNB Beacon Beacon chain.
 
 ## Build
 
